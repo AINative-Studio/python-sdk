@@ -1,0 +1,14 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements.txt
+include pytest.ini
+recursive-include ainative *.py
+recursive-include examples *.py
+recursive-include tests *.py
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.egg-info
+global-exclude htmlcov
+global-exclude .coverage
+global-exclude coverage.xml
