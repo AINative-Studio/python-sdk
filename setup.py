@@ -31,10 +31,10 @@ def read_requirements():
 
 setup(
     name="ainative-python",
-    version="0.1.0",
+    version="0.2.0",
     author="AINative Team",
     author_email="support@ainative.studio",
-    description="Official Python SDK for AINative Studio APIs",
+    description="Official Python SDK for AINative Studio APIs with Table Operations",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/ainative/ainative-python",
@@ -94,9 +94,10 @@ setup(
         "ainative": ["py.typed"],
     },
     keywords=[
-        "ainative", "database", "vector", "embedding", "ai", "ml", 
+        "ainative", "database", "vector", "embedding", "ai", "ml",
         "machine learning", "artificial intelligence", "api", "sdk",
-        "zerodb", "agent swarm", "postgresql", "vector search"
+        "zerodb", "agent swarm", "postgresql", "vector search", "nosql",
+        "table operations", "mongodb-style", "crud"
     ],
     zip_safe=False,
 )

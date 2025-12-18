@@ -145,6 +145,57 @@ client.zerodb.vectors.delete(
 )
 ```
 
+### NoSQL Table Operations
+
+```python
+# Create a table with schema
+table = client.zerodb.tables.create_table(
+    table_name="users",
+    schema={
+        "fields": {
+            "email": "string",
+            "name": "string",
+            "age": "number",
+            "active": "boolean"
+        },
+        "indexes": ["email"]
+    }
+)
+
+# Insert rows
+result = client.zerodb.tables.insert_rows("users", [
+    {"email": "user@example.com", "name": "John", "age": 30, "active": True},
+    {"email": "jane@example.com", "name": "Jane", "age": 25, "active": True}
+])
+
+# Query rows with filters
+users = client.zerodb.tables.query_rows(
+    "users",
+    filter={"age": {"$gte": 25}, "active": True},
+    sort={"age": -1},
+    limit=10
+)
+
+# Update rows
+client.zerodb.tables.update_rows(
+    "users",
+    filter={"email": "user@example.com"},
+    update={"$set": {"age": 31}}
+)
+
+# Delete rows
+client.zerodb.tables.delete_rows(
+    "users",
+    filter={"age": {"$lt": 18}}
+)
+
+# Count rows
+total = client.zerodb.tables.count_rows("users")
+active_users = client.zerodb.tables.count_rows("users", filter={"active": True})
+```
+
+See the complete [Table Operations Guide](TABLE_OPERATIONS.md) for advanced usage.
+
 ### Memory Management
 
 ```python
