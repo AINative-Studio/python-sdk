@@ -295,14 +295,14 @@ class AgentSwarmClient:
     ) -> Dict[str, Any]:
         """
         Create a custom agent template.
-        
+
         Args:
             name: Agent name
             agent_type: Type of agent
             capabilities: List of capabilities
             prompt: Agent prompt
             config: Additional configuration
-        
+
         Returns:
             Created agent details
         """
@@ -313,8 +313,194 @@ class AgentSwarmClient:
             "prompt": prompt,
             "config": config or {},
         }
-        
+
         return self.client.post(f"{self.base_path}/agents", data=data)
+
+    def list_swarms(
+        self,
+        project_id: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> Dict[str, Any]:
+        """
+        List all swarms with optional filtering.
+
+        Args:
+            project_id: Filter by project ID
+            status: Filter by status
+            limit: Maximum number of results
+            offset: Pagination offset
+
+        Returns:
+            List of swarms with pagination metadata
+        """
+        params = {
+            "limit": limit,
+            "offset": offset,
+        }
+
+        if project_id:
+            params["project_id"] = project_id
+        if status:
+            params["status"] = status
+
+        return self.client.get(self.base_path, params=params)
+
+    def delete_swarm(self, swarm_id: str, force: bool = False) -> Dict[str, Any]:
+        """
+        Delete a swarm.
+
+        Args:
+            swarm_id: Swarm ID to delete
+            force: Force deletion without cleanup
+
+        Returns:
+            Deletion confirmation
+        """
+        params = {"force": str(force).lower()}
+        return self.client.delete(f"{self.base_path}/{swarm_id}", params=params)
+
+    def scale_swarm(
+        self,
+        swarm_id: str,
+        agent_counts: Dict[str, int],
+    ) -> Dict[str, Any]:
+        """
+        Scale swarm by adjusting agent counts.
+
+        Args:
+            swarm_id: Swarm ID
+            agent_counts: Dictionary mapping agent types to desired counts
+
+        Returns:
+            Scaling operation result
+        """
+        data = {"agent_counts": agent_counts}
+        return self.client.post(f"{self.base_path}/{swarm_id}/scale", data=data)
+
+    def get_analytics(
+        self,
+        swarm_id: str,
+        metric_types: Optional[List[str]] = None,
+        time_range: str = "7d",
+    ) -> Dict[str, Any]:
+        """
+        Get swarm analytics and performance metrics.
+
+        Args:
+            swarm_id: Swarm ID
+            metric_types: Specific metrics to retrieve
+            time_range: Time range (1d, 7d, 30d, all)
+
+        Returns:
+            Analytics data
+        """
+        params = {"time_range": time_range}
+
+        if metric_types:
+            params["metric_types"] = ",".join(metric_types)
+
+        return self.client.get(f"{self.base_path}/{swarm_id}/analytics", params=params)
+
+    def execute_parallel_tasks(
+        self,
+        swarm_id: str,
+        tasks: List[Dict[str, Any]],
+        max_concurrency: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """
+        Execute multiple tasks in parallel across swarm.
+
+        Args:
+            swarm_id: Swarm ID
+            tasks: List of task definitions
+            max_concurrency: Maximum concurrent executions
+
+        Returns:
+            Parallel execution results
+        """
+        data = {
+            "tasks": tasks,
+        }
+
+        if max_concurrency:
+            data["max_concurrency"] = max_concurrency
+
+        return self.client.post(
+            f"{self.base_path}/{swarm_id}/tasks/parallel",
+            data=data
+        )
+
+    def get_swarm_health(self, swarm_id: str) -> Dict[str, Any]:
+        """
+        Get swarm health status.
+
+        Args:
+            swarm_id: Swarm ID
+
+        Returns:
+            Health status details
+        """
+        return self.client.get(f"{self.base_path}/{swarm_id}/health")
+
+    def update_swarm_config(
+        self,
+        swarm_id: str,
+        config: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Update swarm configuration.
+
+        Args:
+            swarm_id: Swarm ID
+            config: New configuration settings
+
+        Returns:
+            Updated configuration
+        """
+        return self.client.put(f"{self.base_path}/{swarm_id}/config", data=config)
+
+    def get_agent_status(
+        self,
+        swarm_id: str,
+        agent_id: str,
+    ) -> Dict[str, Any]:
+        """
+        Get detailed status of a specific agent in the swarm.
+
+        Args:
+            swarm_id: Swarm ID
+            agent_id: Agent ID
+
+        Returns:
+            Agent status details
+        """
+        return self.client.get(f"{self.base_path}/{swarm_id}/agents/{agent_id}/status")
+
+    def broadcast_message(
+        self,
+        swarm_id: str,
+        message: str,
+        target_agents: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Broadcast a message to all or specific agents in swarm.
+
+        Args:
+            swarm_id: Swarm ID
+            message: Message to broadcast
+            target_agents: Optional list of specific agent IDs
+
+        Returns:
+            Broadcast confirmation
+        """
+        data = {"message": message}
+
+        if target_agents:
+            data["target_agents"] = target_agents
+
+        return self.client.post(f"{self.base_path}/{swarm_id}/broadcast", data=data)
 
 
 __all__ = [

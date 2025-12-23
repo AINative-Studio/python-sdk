@@ -31,7 +31,7 @@ def read_requirements():
 
 setup(
     name="ainative-python",
-    version="0.2.0",
+    version="1.0.0",
     author="AINative Team",
     author_email="support@ainative.studio",
     description="Official Python SDK for AINative Studio APIs with Table Operations",

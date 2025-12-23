@@ -4,7 +4,7 @@ AINative Python SDK
 Official Python SDK for AINative Studio APIs including ZeroDB and Agent Swarm operations.
 """
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __author__ = "AINative Team"
 __email__ = "support@ainative.studio"
 
@@ -22,6 +22,10 @@ from .exceptions import (
 # Convenience imports for common operations
 from .zerodb import ZeroDBClient
 from .agent_swarm import AgentSwarmClient
+from .agent_orchestration import AgentOrchestrationClient
+from .agent_coordination import AgentCoordinationClient
+from .agent_learning import AgentLearningClient
+from .agent_state import AgentStateClient
 
 __all__ = [
     "AINativeClient",
@@ -35,4 +39,8 @@ __all__ = [
     "RateLimitError",
     "ZeroDBClient",
     "AgentSwarmClient",
+    "AgentOrchestrationClient",
+    "AgentCoordinationClient",
+    "AgentLearningClient",
+    "AgentStateClient",
 ]

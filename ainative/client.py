@@ -20,6 +20,10 @@ from .exceptions import (
 )
 from .zerodb import ZeroDBClient
 from .agent_swarm import AgentSwarmClient
+from .agent_orchestration import AgentOrchestrationClient
+from .agent_coordination import AgentCoordinationClient
+from .agent_learning import AgentLearningClient
+from .agent_state import AgentStateClient
 
 
 @dataclass
@@ -92,6 +96,10 @@ class AINativeClient:
         # Initialize sub-clients
         self._zerodb: Optional[ZeroDBClient] = None
         self._agent_swarm: Optional[AgentSwarmClient] = None
+        self._agent_orchestration: Optional[AgentOrchestrationClient] = None
+        self._agent_coordination: Optional[AgentCoordinationClient] = None
+        self._agent_learning: Optional[AgentLearningClient] = None
+        self._agent_state: Optional[AgentStateClient] = None
     
     @property
     def zerodb(self) -> ZeroDBClient:
@@ -106,6 +114,34 @@ class AINativeClient:
         if not self._agent_swarm:
             self._agent_swarm = AgentSwarmClient(self)
         return self._agent_swarm
+
+    @property
+    def agent_orchestration(self) -> AgentOrchestrationClient:
+        """Get Agent Orchestration operations client."""
+        if not self._agent_orchestration:
+            self._agent_orchestration = AgentOrchestrationClient(self)
+        return self._agent_orchestration
+
+    @property
+    def agent_coordination(self) -> AgentCoordinationClient:
+        """Get Agent Coordination operations client."""
+        if not self._agent_coordination:
+            self._agent_coordination = AgentCoordinationClient(self)
+        return self._agent_coordination
+
+    @property
+    def agent_learning(self) -> AgentLearningClient:
+        """Get Agent Learning operations client."""
+        if not self._agent_learning:
+            self._agent_learning = AgentLearningClient(self)
+        return self._agent_learning
+
+    @property
+    def agent_state(self) -> AgentStateClient:
+        """Get Agent State operations client."""
+        if not self._agent_state:
+            self._agent_state = AgentStateClient(self)
+        return self._agent_state
     
     def request(
         self,
