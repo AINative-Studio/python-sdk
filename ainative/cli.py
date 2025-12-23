@@ -654,6 +654,28 @@ def health():
         handle_error(e)
 
 
+# Register new command groups
+try:
+    from .commands import (
+        agents_group,
+        swarm_group,
+        task_group,
+        coordination_group,
+        learning_group,
+        state_group
+    )
+    cli.add_command(agents_group)
+    cli.add_command(swarm_group)
+    cli.add_command(task_group)
+    cli.add_command(coordination_group)
+    cli.add_command(learning_group)
+    cli.add_command(state_group)
+except ImportError as e:
+    # CLI command groups not available
+    # This is OK for initial usage
+    pass
+
+
 def main():
     """Main CLI entry point"""
     try:
