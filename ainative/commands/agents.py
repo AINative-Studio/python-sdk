@@ -32,11 +32,12 @@ def list_agents(format: str):
     """List all available agent identities."""
     try:
         registry = AgentRegistry()
-        agents = registry.list_agents()
+        agent_ids = registry.list_agents()
 
         if format == "json":
             output = []
-            for agent in agents:
+            for agent_id in agent_ids:
+                agent = registry.get_identity(agent_id)
                 output.append({
                     "id": agent.id,
                     "name": agent.name,
@@ -51,7 +52,8 @@ def list_agents(format: str):
             table.add_column("Role", style="dim")
             table.add_column("Emoji", justify="center")
 
-            for agent in agents:
+            for agent_id in agent_ids:
+                agent = registry.get_identity(agent_id)
                 table.add_row(
                     agent.id,
                     agent.name,
@@ -73,7 +75,7 @@ def show_agent(agent_id: str, format: str):
     """Show detailed information about an agent."""
     try:
         registry = AgentRegistry()
-        agent = registry.get_agent(agent_id)
+        agent = registry.get_identity(agent_id)
 
         if not agent:
             click.echo(f"Error: Agent '{agent_id}' not found", err=True)
@@ -171,7 +173,7 @@ def export_agent(agent_id: str, output: Optional[str], format: str):
     """Export an agent identity to file."""
     try:
         registry = AgentRegistry()
-        agent = registry.get_agent(agent_id)
+        agent = registry.get_identity(agent_id)
 
         if not agent:
             click.echo(f"Error: Agent '{agent_id}' not found", err=True)
@@ -213,7 +215,7 @@ def preview_agent(agent_id: str, message: str):
     """Preview an agent's visual styling."""
     try:
         registry = AgentRegistry()
-        agent = registry.get_agent(agent_id)
+        agent = registry.get_identity(agent_id)
 
         if not agent:
             click.echo(f"Error: Agent '{agent_id}' not found", err=True)
