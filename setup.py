@@ -31,10 +31,10 @@ def read_requirements():
 
 setup(
     name="ainative-python",
-    version="1.0.0",
+    version="2.0.0",
     author="AINative Team",
     author_email="support@ainative.studio",
-    description="Official Python SDK for AINative Studio APIs with Table Operations",
+    description="Official Python SDK for AINative Studio APIs with ZeroDB Local support",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/ainative/ainative-python",
