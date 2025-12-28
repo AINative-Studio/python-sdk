@@ -662,7 +662,10 @@ try:
         task_group,
         coordination_group,
         learning_group,
-        state_group
+        state_group,
+        local_group,
+        inspect_group,
+        sync_group
     )
     cli.add_command(agents_group)
     cli.add_command(swarm_group)
@@ -670,6 +673,9 @@ try:
     cli.add_command(coordination_group)
     cli.add_command(learning_group)
     cli.add_command(state_group)
+    cli.add_command(local_group)
+    cli.add_command(inspect_group)
+    cli.add_command(sync_group)
 except ImportError as e:
     # CLI command groups not available
     # This is OK for initial usage
