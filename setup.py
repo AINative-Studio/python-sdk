@@ -27,6 +27,13 @@ def read_requirements():
         'pydantic>=2.0.0',
         'httpx>=0.24.0',
         'aiohttp>=3.8.0',
+        'numpy>=1.24.0',
+        'PyYAML>=6.0.0',
+        'python-dotenv>=1.0.0',
+        'click>=8.1.0',
+        'rich>=13.0.0',
+        'tenacity>=8.2.0',
+        'backoff>=2.2.0',
     ]
 
 setup(

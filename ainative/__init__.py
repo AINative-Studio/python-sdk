@@ -4,7 +4,7 @@ AINative Python SDK
 Official Python SDK for AINative Studio APIs including ZeroDB and Agent Swarm operations.
 """
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __author__ = "AINative Team"
 __email__ = "support@ainative.studio"
 

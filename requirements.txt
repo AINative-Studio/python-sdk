@@ -14,6 +14,9 @@ asyncio>=3.4.3
 # Data handling
 numpy>=1.24.0
 
+# YAML support
+PyYAML>=6.0.0
+
 # Configuration
 python-dotenv>=1.0.0
 

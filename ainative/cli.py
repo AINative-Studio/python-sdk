@@ -12,7 +12,7 @@ from typing import Optional, List, Dict, Any
 import numpy as np
 from datetime import datetime, timedelta
 
-from . import AINativeClient
+from . import AINativeClient, __version__
 from .auth import AuthConfig
 from .exceptions import AINativeException, APIError, AuthenticationError
 from .zerodb.memory import MemoryPriority
@@ -98,7 +98,7 @@ def format_output(data: Any, format_type: str = "json") -> str:
 
 # Main CLI group
 @click.group()
-@click.version_option(version="0.1.0", prog_name="ainative")
+@click.version_option(version=__version__, prog_name="ainative")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 @click.pass_context
 def cli(ctx, verbose):
