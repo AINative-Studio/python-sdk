@@ -56,7 +56,7 @@ class APIKeyAuth:
         
         headers = {
             "X-API-Key": self.config.api_key,
-            "X-SDK-Version": "0.1.0",
+            "X-SDK-Version": "3.0.0",
             "X-SDK-Language": "Python",
         }
         

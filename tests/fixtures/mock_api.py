@@ -285,10 +285,11 @@ def api_response_builder():
 
 @pytest.fixture
 def mock_client_with_tables(mock_table_list_response):
-    """Mock client pre-configured with table list"""
+    """Mock client pre-configured with table list (v3.0 signature with project_id)"""
     client = MagicMock()
-    client.zerodb.tables.list.return_value = mock_table_list_response
-    client.zerodb.tables.query.return_value = {
+    # Update mocks to match v3.0 API signature: list_tables(project_id, ...)
+    client.zerodb.tables.list_tables.return_value = mock_table_list_response
+    client.zerodb.tables.query_rows.return_value = {
         'rows': [
             {'id': '1', 'email': 'user1@example.com'},
             {'id': '2', 'email': 'user2@example.com'}
@@ -312,9 +313,9 @@ def mock_client_with_vectors(mock_vector_stats_response):
 
 @pytest.fixture
 def mock_client_empty():
-    """Mock client with empty responses"""
+    """Mock client with empty responses (v3.0 signatures with project_id)"""
     client = MagicMock()
-    client.zerodb.tables.list.return_value = {'tables': []}
+    client.zerodb.tables.list_tables.return_value = {'tables': []}
     client.zerodb.vectors.describe_index_stats.return_value = {
         'total_vectors': 0,
         'dimensions': 1536,

@@ -21,12 +21,14 @@ class TablesClient:
             client: Parent AINative client instance
         """
         self.client = client
-        self.base_path = "/zerodb/tables"
+        # Tables are accessed via /projects/{project_id}/database/tables/*
+        self.base_path = "/projects"
 
     # Table Management Operations
 
     def create_table(
         self,
+        project_id: str,
         table_name: str,
         schema: Dict[str, Any],
         description: Optional[str] = None,
@@ -35,6 +37,7 @@ class TablesClient:
         Create a new NoSQL table.
 
         Args:
+            project_id: Project ID (required)
             table_name: Unique table name
             schema: Table schema definition with fields and indexes
                 Example: {
@@ -52,6 +55,7 @@ class TablesClient:
 
         Example:
             >>> client.zerodb.tables.create_table(
+            ...     PROJECT_ID,
             ...     "users",
             ...     schema={
             ...         "fields": {"email": "string", "name": "string", "age": "number"},
@@ -67,10 +71,11 @@ class TablesClient:
         if description:
             data["description"] = description
 
-        return self.client.post(self.base_path, data=data)
+        return self.client.post(f"{self.base_path}/{project_id}/database/tables", data=data)
 
     def list_tables(
         self,
+        project_id: str,
         limit: int = 100,
         offset: int = 0,
     ) -> Dict[str, Any]:
@@ -78,6 +83,7 @@ class TablesClient:
         List all tables in the project.
 
         Args:
+            project_id: Project ID (required)
             limit: Maximum number of results (default: 100)
             offset: Pagination offset (default: 0)
 
@@ -85,7 +91,7 @@ class TablesClient:
             Dictionary with 'tables' list and 'total' count
 
         Example:
-            >>> tables = client.zerodb.tables.list_tables(limit=50)
+            >>> tables = client.zerodb.tables.list_tables(PROJECT_ID, limit=50)
             >>> for table in tables['tables']:
             ...     print(f"{table['table_name']}: {table['row_count']} rows")
         """
@@ -94,30 +100,33 @@ class TablesClient:
             "offset": offset,
         }
 
-        return self.client.get(self.base_path, params=params)
+        return self.client.get(f"{self.base_path}/{project_id}/database/tables", params=params)
 
     def get_table(
         self,
+        project_id: str,
         table_id: str,
     ) -> Dict[str, Any]:
         """
         Get table details and metadata.
 
         Args:
+            project_id: Project ID (required)
             table_id: Table ID or table name
 
         Returns:
             Table details including schema, row_count, and statistics
 
         Example:
-            >>> table = client.zerodb.tables.get_table("users")
+            >>> table = client.zerodb.tables.get_table(PROJECT_ID, "users")
             >>> print(f"Schema: {table['schema']}")
             >>> print(f"Rows: {table['row_count']}")
         """
-        return self.client.get(f"{self.base_path}/{table_id}")
+        return self.client.get(f"{self.base_path}/{project_id}/database/tables/{table_id}")
 
     def delete_table(
         self,
+        project_id: str,
         table_id: str,
         confirm: bool = False,
     ) -> Dict[str, Any]:
@@ -125,6 +134,7 @@ class TablesClient:
         Delete a table and all its data.
 
         Args:
+            project_id: Project ID (required)
             table_id: Table ID or table name
             confirm: Must be True to confirm deletion (safety check)
 
@@ -132,7 +142,7 @@ class TablesClient:
             Deletion result with number of rows deleted
 
         Example:
-            >>> result = client.zerodb.tables.delete_table("old_table", confirm=True)
+            >>> result = client.zerodb.tables.delete_table(PROJECT_ID, "old_table", confirm=True)
             >>> print(f"Deleted {result['rows_deleted']} rows")
         """
         if not confirm:
@@ -142,12 +152,13 @@ class TablesClient:
             )
 
         data = {"confirm": True}
-        return self.client.delete(f"{self.base_path}/{table_id}", data=data)
+        return self.client.delete(f"{self.base_path}/{project_id}/database/tables/{table_id}", data=data)
 
     # Row Operations
 
     def insert_rows(
         self,
+        project_id: str,
         table_name: str,
         rows: List[Dict[str, Any]],
         return_ids: bool = True,
@@ -156,6 +167,7 @@ class TablesClient:
         Insert rows into a table.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name
             rows: List of row objects to insert (max 1000 per request)
             return_ids: Whether to return inserted row IDs
@@ -168,7 +180,7 @@ class TablesClient:
             ...     {"email": "user@example.com", "name": "John", "age": 30},
             ...     {"email": "jane@example.com", "name": "Jane", "age": 25}
             ... ]
-            >>> result = client.zerodb.tables.insert_rows("users", rows)
+            >>> result = client.zerodb.tables.insert_rows(PROJECT_ID, "users", rows)
             >>> print(f"Inserted {result['inserted_count']} rows")
         """
         if not rows:
@@ -182,10 +194,11 @@ class TablesClient:
             "return_ids": return_ids,
         }
 
-        return self.client.post(f"{self.base_path}/{table_name}/rows", data=data)
+        return self.client.post(f"{self.base_path}/{project_id}/database/tables/{table_name}/rows", data=data)
 
     def query_rows(
         self,
+        project_id: str,
         table_name: str,
         filter: Optional[Dict[str, Any]] = None,
         sort: Optional[Dict[str, int]] = None,
@@ -197,6 +210,7 @@ class TablesClient:
         Query rows from a table with filters and sorting.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name
             filter: MongoDB-style query filter
                 Example: {"age": {"$gte": 25}, "status": "active"}
@@ -213,6 +227,7 @@ class TablesClient:
         Example:
             >>> # Query users over 25, sorted by age descending
             >>> results = client.zerodb.tables.query_rows(
+            ...     PROJECT_ID,
             ...     "users",
             ...     filter={"age": {"$gte": 25}},
             ...     sort={"age": -1},
@@ -235,10 +250,11 @@ class TablesClient:
         if projection:
             data["projection"] = projection
 
-        return self.client.post(f"{self.base_path}/{table_name}/query", data=data)
+        return self.client.post(f"{self.base_path}/{project_id}/database/tables/{table_name}/query", data=data)
 
     def update_rows(
         self,
+        project_id: str,
         table_name: str,
         filter: Dict[str, Any],
         update: Dict[str, Any],
@@ -248,6 +264,7 @@ class TablesClient:
         Update rows matching the filter.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name
             filter: MongoDB-style query filter to match rows
             update: Update operations
@@ -260,6 +277,7 @@ class TablesClient:
         Example:
             >>> # Update age for specific user
             >>> result = client.zerodb.tables.update_rows(
+            ...     PROJECT_ID,
             ...     "users",
             ...     filter={"email": "user@example.com"},
             ...     update={"$set": {"age": 31}}
@@ -272,10 +290,11 @@ class TablesClient:
             "upsert": upsert,
         }
 
-        return self.client.put(f"{self.base_path}/{table_name}/rows", data=data)
+        return self.client.put(f"{self.base_path}/{project_id}/database/tables/{table_name}/rows", data=data)
 
     def delete_rows(
         self,
+        project_id: str,
         table_name: str,
         filter: Dict[str, Any],
         limit: int = 0,
@@ -284,6 +303,7 @@ class TablesClient:
         Delete rows matching the filter.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name
             filter: MongoDB-style query filter to match rows
             limit: Maximum rows to delete (0 = all matching, default)
@@ -294,6 +314,7 @@ class TablesClient:
         Example:
             >>> # Delete inactive users
             >>> result = client.zerodb.tables.delete_rows(
+            ...     PROJECT_ID,
             ...     "users",
             ...     filter={"age": {"$lt": 18}}
             ... )
@@ -306,7 +327,7 @@ class TablesClient:
 
         return self.client.request(
             "DELETE",
-            f"{self.base_path}/{table_name}/rows",
+            f"{self.base_path}/{project_id}/database/tables/{table_name}/rows",
             data=data
         )
 
@@ -314,6 +335,7 @@ class TablesClient:
 
     def count_rows(
         self,
+        project_id: str,
         table_name: str,
         filter: Optional[Dict[str, Any]] = None,
     ) -> int:
@@ -321,6 +343,7 @@ class TablesClient:
         Count rows in a table matching optional filter.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name
             filter: Optional query filter
 
@@ -328,10 +351,11 @@ class TablesClient:
             Number of matching rows
 
         Example:
-            >>> count = client.zerodb.tables.count_rows("users", {"age": {"$gte": 18}})
+            >>> count = client.zerodb.tables.count_rows(PROJECT_ID, "users", {"age": {"$gte": 18}})
             >>> print(f"Adult users: {count}")
         """
         result = self.query_rows(
+            project_id,
             table_name,
             filter=filter,
             limit=0  # Don't return actual rows, just count
@@ -340,23 +364,25 @@ class TablesClient:
 
     def table_exists(
         self,
+        project_id: str,
         table_name: str,
     ) -> bool:
         """
         Check if a table exists.
 
         Args:
+            project_id: Project ID (required)
             table_name: Table name to check
 
         Returns:
             True if table exists, False otherwise
 
         Example:
-            >>> if client.zerodb.tables.table_exists("users"):
+            >>> if client.zerodb.tables.table_exists(PROJECT_ID, "users"):
             ...     print("Users table exists")
         """
         try:
-            self.get_table(table_name)
+            self.get_table(project_id, table_name)
             return True
         except Exception:
             return False

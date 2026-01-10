@@ -5,6 +5,119 @@ All notable changes to the AINative Python SDK will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-01-09 🚨 BREAKING CHANGES
+
+### 🔴 BREAKING CHANGES - API Endpoint Path Updates (Issue #738)
+
+This release updates all SDK endpoint paths to use canonical API routes following the backend API cleanup (Issues #728-734). **All deprecated endpoint paths have been removed from the backend and will return 404 errors as of 2026-02-07.**
+
+#### Changed Endpoint Paths
+
+**ZeroDB Projects:**
+- ❌ OLD: `/zerodb/projects/*`
+- ✅ NEW: `/projects/*`
+
+**ZeroDB Vectors:**
+- ❌ OLD: `/zerodb/vectors/*`
+- ✅ NEW: `/projects/{project_id}/database/vectors/*`
+- 🔴 **BREAKING**: All vector methods now require `project_id` as first parameter
+
+**ZeroDB Tables:**
+- ❌ OLD: `/zerodb/tables/*`
+- ✅ NEW: `/projects/{project_id}/database/tables/*`
+- 🔴 **BREAKING**: All table methods now require `project_id` as first parameter
+
+**ZeroDB Memory:**
+- ❌ OLD: `/zerodb/memory/*`
+- ✅ NEW: `/projects/{project_id}/database/memory/*`
+- 🔴 **BREAKING**: All memory methods now require `project_id` as first parameter
+
+**ZeroDB Analytics:**
+- ❌ OLD: `/zerodb/analytics/*`
+- ✅ NEW: `/projects/{project_id}/database/analytics/*`
+- 🔴 **BREAKING**: All analytics methods now require `project_id` as first parameter
+
+**Auth Endpoints:**
+- ❌ OLD: `/public/auth/*`
+- ✅ NEW: `/auth/*` (no changes required - already canonical)
+
+### Migration Guide
+
+#### Before (v2.x):
+```python
+from ainative import AINativeClient
+
+client = AINativeClient(api_key="your-key")
+
+# Old - NO project_id required
+tables = client.zerodb.tables.list_tables()
+vectors = client.zerodb.vectors.search(
+    project_id="proj-123",
+    vector=[0.1, 0.2, ...],
+    top_k=10
+)
+```
+
+#### After (v3.0):
+```python
+from ainative import AINativeClient
+
+client = AINativeClient(api_key="your-key")
+
+# New - project_id REQUIRED as first parameter
+PROJECT_ID = "your-project-id"
+
+tables = client.zerodb.tables.list_tables(PROJECT_ID)
+vectors = client.zerodb.vectors.search(
+    PROJECT_ID,  # Now first parameter
+    vector=[0.1, 0.2, ...],
+    top_k=10
+)
+```
+
+### Updated Modules
+
+#### `zerodb.projects.ProjectsClient`
+- ✅ Updated base_path: `/zerodb/projects` → `/projects`
+- ✅ All methods now use canonical `/projects/*` paths
+
+#### `zerodb.vectors.VectorsClient`
+- ✅ Updated base_path: `/zerodb/vectors` → `/projects`
+- ✅ `upsert()` - Now uses `/projects/{project_id}/database/vectors`
+- ✅ `search()` - Now uses `/projects/{project_id}/database/vectors/search`
+- ✅ `get()` - Now uses `/projects/{project_id}/database/vectors`
+- ✅ `delete()` - Now uses `/projects/{project_id}/database/vectors`
+- ✅ `update_metadata()` - Now uses `/projects/{project_id}/database/vectors/{id}/metadata`
+- ✅ `describe_index_stats()` - Now uses `/projects/{project_id}/database/vectors/stats`
+
+#### `zerodb.tables.TablesClient`
+- ✅ Updated base_path: `/zerodb/tables` → `/projects`
+- 🔴 **BREAKING**: All methods now require `project_id` as first parameter
+- Methods affected: `create_table`, `list_tables`, `get_table`, `delete_table`, `insert_rows`, `query_rows`, `update_rows`, `delete_rows`, `count_rows`, `table_exists`
+
+#### `zerodb.memory.MemoryClient`
+- ✅ Updated base_path: `/zerodb/memory` → `/projects`
+- 🔴 **BREAKING**: All methods now require `project_id` as first parameter
+
+#### `zerodb.analytics.AnalyticsClient`
+- ✅ Updated base_path: `/zerodb/analytics` → `/projects`
+- 🔴 **BREAKING**: All methods now require `project_id` as first parameter
+
+### Important Dates
+
+- **2026-01-09**: SDK v3.0.0 released with new canonical paths
+- **2026-02-07**: Backend removes all deprecated paths (30-day grace period)
+- **Action Required**: Update to SDK v3.0.0 before 2026-02-07
+
+### References
+
+- Issue #738: Python SDK Endpoint Path Updates
+- Issue #728-734: Backend API Cleanup Phase 1
+- API Migration Guide: `docs/api/API_MIGRATION_GUIDE_v2.md`
+- SOW Alignment Audit: `docs/reports/SOW_ALIGNMENT_AUDIT_ISSUES_728_734.md`
+
+---
+
 ## [2.0.0] - 2025-12-28
 
 ### Added - ZeroDB Local Support (Epic 3)

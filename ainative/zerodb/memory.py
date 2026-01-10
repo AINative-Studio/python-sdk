@@ -26,39 +26,46 @@ class MemoryClient:
     def __init__(self, client: "AINativeClient"):
         """
         Initialize memory client.
-        
+
         Args:
             client: Parent AINative client instance
         """
         self.client = client
-        self.base_path = "/zerodb/memory"
+        self.base_path = "/projects"
     
     def create(
         self,
+        project_id: str,
         content: str,
         title: Optional[str] = None,
         tags: Optional[List[str]] = None,
         priority: MemoryPriority = MemoryPriority.MEDIUM,
         metadata: Optional[Dict[str, Any]] = None,
-        project_id: Optional[str] = None,
         user_id: Optional[str] = None,
         expires_at: Optional[datetime] = None,
     ) -> Dict[str, Any]:
         """
         Create a new memory entry.
-        
+
         Args:
+            project_id: Project ID (required)
             content: Memory content
             title: Memory title
             tags: List of tags
             priority: Memory priority level
             metadata: Additional metadata
-            project_id: Associated project ID
             user_id: Associated user ID
             expires_at: Expiration timestamp
-        
+
         Returns:
             Created memory details
+
+        Example:
+            >>> memory = client.zerodb.memory.create(
+            ...     PROJECT_ID,
+            ...     content="User prefers dark mode",
+            ...     tags=["preferences", "ui"]
+            ... )
         """
         data = {
             "content": content,
@@ -67,21 +74,19 @@ class MemoryClient:
             "priority": priority.value,
             "metadata": metadata or {},
         }
-        
-        if project_id:
-            data["project_id"] = project_id
+
         if user_id:
             data["user_id"] = user_id
         if expires_at:
             data["expires_at"] = expires_at.isoformat()
-        
-        return self.client.post(self.base_path, data=data)
+
+        return self.client.post(f"{self.base_path}/{project_id}/database/memory", data=data)
     
     def list(
         self,
+        project_id: str,
         limit: int = 100,
         offset: int = 0,
-        project_id: Optional[str] = None,
         user_id: Optional[str] = None,
         tags: Optional[List[str]] = None,
         priority: Optional[MemoryPriority] = None,
@@ -89,26 +94,27 @@ class MemoryClient:
     ) -> Dict[str, Any]:
         """
         List memory entries.
-        
+
         Args:
+            project_id: Project ID (required)
             limit: Maximum number of entries to return
             offset: Number of entries to skip
-            project_id: Filter by project ID
             user_id: Filter by user ID
             tags: Filter by tags
             priority: Filter by priority
             search: Search query
-        
+
         Returns:
             Dictionary containing memories list and pagination info
+
+        Example:
+            >>> memories = client.zerodb.memory.list(PROJECT_ID, limit=50)
         """
         params = {
             "limit": limit,
             "offset": offset,
         }
-        
-        if project_id:
-            params["project_id"] = project_id
+
         if user_id:
             params["user_id"] = user_id
         if tags:
@@ -117,23 +123,25 @@ class MemoryClient:
             params["priority"] = priority.value
         if search:
             params["search"] = search
-        
-        return self.client.get(f"{self.base_path}ies", params=params)
+
+        return self.client.get(f"{self.base_path}/{project_id}/database/memory", params=params)
     
-    def get(self, memory_id: str) -> Dict[str, Any]:
+    def get(self, project_id: str, memory_id: str) -> Dict[str, Any]:
         """
         Get a specific memory entry.
-        
+
         Args:
+            project_id: Project ID (required)
             memory_id: Memory ID
-        
+
         Returns:
             Memory details
         """
-        return self.client.get(f"{self.base_path}/{memory_id}")
+        return self.client.get(f"{self.base_path}/{project_id}/database/memory/{memory_id}")
     
     def update(
         self,
+        project_id: str,
         memory_id: str,
         content: Optional[str] = None,
         title: Optional[str] = None,
@@ -143,15 +151,16 @@ class MemoryClient:
     ) -> Dict[str, Any]:
         """
         Update a memory entry.
-        
+
         Args:
+            project_id: Project ID (required)
             memory_id: Memory ID
             content: New content
             title: New title
             tags: New tags
             priority: New priority
             metadata: New metadata
-        
+
         Returns:
             Updated memory details
         """
@@ -166,95 +175,100 @@ class MemoryClient:
             data["priority"] = priority.value
         if metadata is not None:
             data["metadata"] = metadata
-        
-        return self.client.patch(f"{self.base_path}/{memory_id}", data=data)
+
+        return self.client.patch(f"{self.base_path}/{project_id}/database/memory/{memory_id}", data=data)
     
-    def delete(self, memory_id: str) -> Dict[str, Any]:
+    def delete(self, project_id: str, memory_id: str) -> Dict[str, Any]:
         """
         Delete a memory entry.
-        
+
         Args:
+            project_id: Project ID (required)
             memory_id: Memory ID
-        
+
         Returns:
             Deletion confirmation
         """
-        return self.client.delete(f"{self.base_path}/{memory_id}")
+        return self.client.delete(f"{self.base_path}/{project_id}/database/memory/{memory_id}")
     
     def search(
         self,
+        project_id: str,
         query: str,
         limit: int = 10,
-        project_id: Optional[str] = None,
         user_id: Optional[str] = None,
         semantic: bool = True,
     ) -> List[Dict[str, Any]]:
         """
         Search memories using text or semantic search.
-        
+
         Args:
+            project_id: Project ID (required)
             query: Search query
             limit: Maximum number of results
-            project_id: Filter by project ID
             user_id: Filter by user ID
             semantic: Use semantic search (if False, uses text search)
-        
+
         Returns:
             List of matching memories
+
+        Example:
+            >>> results = client.zerodb.memory.search(
+            ...     PROJECT_ID,
+            ...     query="What does user prefer?",
+            ...     top_k=5
+            ... )
         """
         data = {
             "query": query,
             "limit": limit,
             "semantic": semantic,
         }
-        
-        if project_id:
-            data["project_id"] = project_id
+
         if user_id:
             data["user_id"] = user_id
-        
-        response = self.client.post(f"{self.base_path}/search", data=data)
+
+        response = self.client.post(f"{self.base_path}/{project_id}/database/memory/search", data=data)
         return response.get("results", [])
     
     def bulk_create(
         self,
+        project_id: str,
         memories: List[Dict[str, Any]],
-        project_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Create multiple memory entries at once.
-        
+
         Args:
+            project_id: Project ID (required)
             memories: List of memory data dictionaries
-            project_id: Project ID for all memories
-        
+
         Returns:
             Bulk creation result
         """
         data = {
             "memories": memories,
         }
-        
-        if project_id:
-            data["project_id"] = project_id
-        
-        return self.client.post(f"{self.base_path}/bulk", data=data)
+
+        return self.client.post(f"{self.base_path}/{project_id}/database/memory/bulk", data=data)
     
     def get_related(
         self,
+        project_id: str,
         memory_id: str,
         limit: int = 5,
     ) -> List[Dict[str, Any]]:
         """
         Get memories related to a specific memory.
-        
+
         Args:
+            project_id: Project ID (required)
             memory_id: Memory ID
             limit: Maximum number of related memories
-        
+
         Returns:
             List of related memories
         """
         params = {"limit": limit}
-        response = self.client.get(f"{self.base_path}/{memory_id}/related", params=params)
+        response = self.client.get(f"{self.base_path}/{project_id}/database/memory/{memory_id}/related", params=params)
         return response.get("memories", [])

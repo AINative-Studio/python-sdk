@@ -17,12 +17,13 @@ class VectorsClient:
     def __init__(self, client: "AINativeClient"):
         """
         Initialize vectors client.
-        
+
         Args:
             client: Parent AINative client instance
         """
         self.client = client
-        self.base_path = "/zerodb/vectors"
+        # Vectors are accessed via /projects/{project_id}/database/vectors/*
+        self.base_path = "/projects"
     
     def upsert(
         self,
@@ -66,8 +67,8 @@ class VectorsClient:
             "namespace": namespace,
             "items": vector_data,
         }
-        
-        return self.client.put(self.base_path, data=data)
+
+        return self.client.put(f"{self.base_path}/{project_id}/database/vectors", data=data)
     
     def search(
         self,
@@ -108,8 +109,8 @@ class VectorsClient:
         
         if filter:
             data["filter"] = filter
-        
-        response = self.client.post(f"{self.base_path}/search", data=data)
+
+        response = self.client.post(f"{self.base_path}/{project_id}/database/vectors/search", data=data)
         return response.get("results", [])
     
     def get(
@@ -140,8 +141,8 @@ class VectorsClient:
             "include_metadata": include_metadata,
             "include_values": include_values,
         }
-        
-        response = self.client.get(self.base_path, params=params)
+
+        response = self.client.get(f"{self.base_path}/{project_id}/database/vectors", params=params)
         return response.get("vectors", [])
     
     def delete(
@@ -178,8 +179,8 @@ class VectorsClient:
             data["filter"] = filter
         else:
             raise ValueError("Must provide ids, filter, or delete_all=True")
-        
-        return self.client.delete(self.base_path, data=data)
+
+        return self.client.delete(f"{self.base_path}/{project_id}/database/vectors", data=data)
     
     def update_metadata(
         self,
@@ -206,8 +207,8 @@ class VectorsClient:
             "metadata": metadata,
             "namespace": namespace,
         }
-        
-        return self.client.patch(f"{self.base_path}/{id}/metadata", data=data)
+
+        return self.client.patch(f"{self.base_path}/{project_id}/database/vectors/{id}/metadata", data=data)
     
     def describe_index_stats(
         self,
@@ -227,5 +228,5 @@ class VectorsClient:
         params = {"project_id": project_id}
         if namespace:
             params["namespace"] = namespace
-        
-        return self.client.get(f"{self.base_path}/stats", params=params)
+
+        return self.client.get(f"{self.base_path}/{project_id}/database/vectors/stats", params=params)

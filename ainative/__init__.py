@@ -2,9 +2,14 @@
 AINative Python SDK
 
 Official Python SDK for AINative Studio APIs including ZeroDB and Agent Swarm operations.
+
+⚠️  BREAKING CHANGES IN v3.0.0:
+- All ZeroDB endpoint paths updated to canonical routes
+- table/memory/analytics methods now require project_id as first parameter
+- See CHANGELOG.md for migration guide
 """
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __author__ = "AINative Team"
 __email__ = "support@ainative.studio"
 

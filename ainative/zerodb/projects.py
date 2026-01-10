@@ -26,12 +26,12 @@ class ProjectsClient:
     def __init__(self, client: "AINativeClient"):
         """
         Initialize projects client.
-        
+
         Args:
             client: Parent AINative client instance
         """
         self.client = client
-        self.base_path = "/zerodb/projects"
+        self.base_path = "/projects"
     
     def list(
         self,
