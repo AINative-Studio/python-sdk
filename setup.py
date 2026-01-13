@@ -38,7 +38,7 @@ def read_requirements():
 
 setup(
     name="ainative-python",
-    version="3.0.0",
+    version="3.1.0",
     author="AINative Team",
     author_email="support@ainative.studio",
     description="Official Python SDK for AINative Studio APIs with ZeroDB Local support",

@@ -9,7 +9,7 @@ Official Python SDK for AINative Studio APIs including ZeroDB and Agent Swarm op
 - See CHANGELOG.md for migration guide
 """
 
-__version__ = "3.0.0"
+__version__ = "3.1.0"
 __author__ = "AINative Team"
 __email__ = "support@ainative.studio"
 

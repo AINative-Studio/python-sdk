@@ -5,6 +5,31 @@ All notable changes to the AINative Python SDK will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-01-12
+
+### Changed
+- SDK certified compatible with backend endpoint consolidation (Issue #757, #758)
+- No code changes required - SDK already uses canonical paths
+- SDK ready for deprecated /v1/admin/* endpoint sunset (2026-02-12)
+
+### Notes
+- Python SDK does not use any of the deprecated admin paths
+- All SDK endpoints already use canonical /v1/public/* or /v1/projects/* paths
+- Version bump ensures users have deprecation-safe SDK version
+- See docs/api/ISSUE_757_MIGRATION_GUIDE.md for backend changes
+
+### Deprecated Backend Paths (Not Used by SDK)
+The following backend paths are deprecated (sunset: 2026-02-12):
+- /v1/admin/api-keys → /v1/public/api-keys
+- /v1/admin/subscription → /v1/public/subscription
+- /v1/admin/profile → /v1/public/profile
+- /v1/admin/settings → /v1/public/settings
+- /v1/admin/github → /v1/public/github
+- /v1/admin/load-testing → /v1/public/load-testing
+- /v1/admin/sandbox → /v1/public/sandbox
+
+**Python SDK Status:** Already compliant - no changes needed.
+
 ## [3.0.0] - 2026-01-09 🚨 BREAKING CHANGES
 
 ### 🔴 BREAKING CHANGES - API Endpoint Path Updates (Issue #738)
