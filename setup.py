@@ -38,19 +38,19 @@ def read_requirements():
 
 setup(
     name="ainative-python",
-    version="3.1.0",
+    version="3.1.1",
     author="AINative Team",
     author_email="support@ainative.studio",
     description="Official Python SDK for AINative Studio APIs with ZeroDB Local support",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/AINative-Studio/core",
+    url="https://ainative.studio",
     project_urls={
         "Homepage": "https://ainative.studio",
         "Documentation": "https://docs.ainative.studio/sdk/python",
         "API Reference": "https://api.ainative.studio/docs-enhanced",
         "Bug Reports": "https://github.com/AINative-Studio/core/issues",
-        "Source": "https://github.com/AINative-Studio/core",
+        "Source": "https://github.com/AINative-Studio/core/tree/main/developer-tools/sdks/python",
     },
     packages=find_packages(exclude=['tests', 'tests.*', 'examples', 'examples.*']),
     classifiers=[
