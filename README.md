@@ -19,7 +19,7 @@ pip install ainative-python
 
 For development version:
 ```bash
-pip install git+https://github.com/ainative/ainative-python.git
+pip install git+https://github.com/AINative-Studio/core.git#subdirectory=developer-tools/sdks/python
 ```
 
 ## Quick Start
@@ -430,8 +430,8 @@ Full examples are available in the [examples/](examples/) directory:
 
 ```bash
 # Clone repository
-git clone https://github.com/ainative/ainative-python.git
-cd ainative-python
+git clone https://github.com/AINative-Studio/core.git
+cd core/developer-tools/sdks/python
 
 # Install in development mode
 pip install -e ".[dev]"
@@ -464,7 +464,7 @@ pytest tests/test_zerodb.py
 
 - **Documentation**: [https://docs.ainative.studio/sdk/python](https://docs.ainative.studio/sdk/python)
 - **API Reference**: [https://api.ainative.studio/docs-enhanced](https://api.ainative.studio/docs-enhanced)
-- **Issues**: [GitHub Issues](https://github.com/ainative/ainative-python/issues)
+- **Issues**: [GitHub Issues](https://github.com/AINative-Studio/core/issues)
 - **Discord**: [Join our community](https://discord.gg/ainative)
 
 ## License

@@ -309,4 +309,4 @@ client.zerodb.tables.delete_rows(
 - **Full Guide:** [TABLE_OPERATIONS.md](TABLE_OPERATIONS.md)
 - **Examples:** [examples/table_operations_example.py](examples/table_operations_example.py)
 - **API Docs:** https://api.ainative.studio/docs-enhanced
-- **Support:** https://github.com/ainative/studio/issues
+- **Support:** https://github.com/AINative-Studio/core/issues

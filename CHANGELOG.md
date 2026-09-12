@@ -243,5 +243,5 @@ ainative inspect sync
 
 For more information, visit:
 - Documentation: https://docs.ainative.studio/sdk/python
-- GitHub: https://github.com/ainative/ainative-python
-- Issues: https://github.com/ainative/studio/issues
+- GitHub: https://github.com/AINative-Studio/core
+- Issues: https://github.com/AINative-Studio/core/issues

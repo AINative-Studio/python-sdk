@@ -34,8 +34,8 @@ pip install ainative-python
 Or from source:
 
 ```bash
-git clone https://github.com/ainative/ainative-python.git
-cd ainative-python
+git clone https://github.com/AINative-Studio/core.git
+cd core/developer-tools/sdks/python
 pip install -e .
 ```
 
@@ -576,8 +576,8 @@ python examples/table_operations_example.py
 
 - **Documentation**: https://docs.ainative.studio/sdk/python/tables
 - **API Reference**: https://api.ainative.studio/docs-enhanced
-- **GitHub**: https://github.com/ainative/ainative-python
-- **Issues**: https://github.com/ainative/studio/issues
+- **GitHub**: https://github.com/AINative-Studio/core
+- **Issues**: https://github.com/AINative-Studio/core/issues
 
 ## License
 

@@ -116,7 +116,7 @@ ainative inspect --help
 **Package Name:** `ainative-python`
 **Version:** 2.0.0
 **PyPI URL:** https://pypi.org/project/ainative-python/
-**GitHub:** https://github.com/ainative/ainative-python
+**GitHub:** https://github.com/AINative-Studio/core
 
 **Distribution Files:**
 - Source: `ainative_python-2.0.0.tar.gz` (72K)

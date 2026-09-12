@@ -329,7 +329,7 @@ swarm = client.agent_swarm.start_swarm(...)
 - **CHANGELOG:** See `CHANGELOG.md` in SDK
 
 ### Support Channels
-- **GitHub Issues:** https://github.com/ainative/studio/issues
+- **GitHub Issues:** https://github.com/AINative-Studio/core/issues
 - **Email:** support@ainative.studio
 - **Discord:** https://discord.gg/ainative
 
