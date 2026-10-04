@@ -17,9 +17,9 @@ Official Python SDK for AINative Studio APIs - unified database and AI operation
 pip install ainative-python
 ```
 
-For development version:
+For the development version:
 ```bash
-pip install git+https://github.com/AINative-Studio/core.git#subdirectory=developer-tools/sdks/python
+pip install git+https://github.com/AINative-Studio/python-sdk.git
 ```
 
 ## Quick Start
@@ -464,16 +464,16 @@ pytest tests/test_zerodb.py
 
 - **Documentation**: [https://docs.ainative.studio/sdk/python](https://docs.ainative.studio/sdk/python)
 - **API Reference**: [https://api.ainative.studio/docs-enhanced](https://api.ainative.studio/docs-enhanced)
-- **Issues**: [GitHub Issues](https://github.com/AINative-Studio/core/issues)
+- **Issues & feature requests**: [GitHub Issues](https://github.com/AINative-Studio/python-sdk/issues)
 - **Discord**: [Join our community](https://discord.gg/ainative)
+
+## Contributing
+
+We welcome contributions! Fork this repo, make your change, and open a pull request — see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, style, and testing details.
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## Changelog
 
